@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard — Stealth</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Sidebar button -->
+  <button id="menuBtn" class="menu-btn">☰</button>
+
+  <!-- Sidebar menu -->
+  <nav id="sidebar" class="sidebar hidden">
+    <ul id="menuList">
+      <!-- Menu items akan ditambahkan via JS -->
+    </ul>
+  </nav>
+
+  <header>
+    <h1 id="welcomeText">Welcome!</h1>
+    <p id="roleText"></p>
+  </header>
+
+  <main id="mainContent">
+    <p>Pilih menu di sidebar kiri atas.</p>
+  </main>
+
+  <script>
+    // contoh data user login
+    const userData = {
+      email: "admin@admin.id",  // nanti diisi dari login
+      role: "admin" // "admin" atau "user"
+    };
+
+    const menuList = document.getElementById("menuList");
+    const mainContent = document.getElementById("mainContent");
+    const welcomeText = document.getElementById("welcomeText");
+    const roleText = document.getElementById("roleText");
+    const sidebar = document.getElementById("sidebar");
+    const menuBtn = document.getElementById("menuBtn");
+
+    // Toggle sidebar
+    menuBtn.addEventListener("click", () => {
+      sidebar.classList.toggle("hidden");
+    });
+
+    // update welcome
+    welcomeText.textContent = `Welcome, ${userData.email}!`;
+    roleText.textContent = `Role: ${userData.role}`;
+
+    // menu default
+    let menus = [
+      { name: "Send Gmail", id: "sendGmail" },
+      { name: "Cek Bio", id: "cekBio" },
+      { name: "Pairing", id: "pairing" }
+    ];
+
+    // jika admin, tambahkan menu admin
+    if(userData.role === "admin") {
+      menus.push({ name: "Admin Portal", id: "adminPortal" });
+    }
+
+    // render menu
+    menus.forEach(menu => {
+      const li = document.createElement("li");
+      const btn = document.createElement("button");
+      btn.textContent = menu.name;
+      btn.addEventListener("click", () => loadMenu(menu.id));
+      li.appendChild(btn);
+      menuList.appendChild(li);
+    });
+
+    // fungsi load menu
+    function loadMenu(menuId) {
+      switch(menuId){
+        case "sendGmail":
+          mainContent.innerHTML = `<h2>Send Gmail</h2><p>Redirect ke halaman send gmail...</p>`;
+          break;
+        case "cekBio":
+          mainContent.innerHTML = `<h2>Cek Bio WhatsApp</h2><p>Redirect ke halaman cek bio...</p>`;
+          break;
+        case "pairing":
+          mainContent.innerHTML = `<h2>Pairing Code</h2><p>Redirect ke halaman pairing...</p>`;
+          break;
+        case "adminPortal":
+          mainContent.innerHTML = `<h2>Admin Portal</h2><p>Disini admin bisa Add Access user...</p>`;
+          break;
+        default:
+          mainContent.innerHTML = `<p>Menu tidak ditemukan.</p>`;
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: #111;
+      color: #eee;
+      margin:0;
+      padding:0;
+    }
+
+    header { text-align:center; padding:20px; }
+
+    main { padding:20px; }
+
+    .menu-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: #222;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      font-size: 20px;
+      cursor:pointer;
+      z-index: 1000;
+      border-radius:6px;
+    }
+
+    .sidebar {
+      position: fixed;
+      top:0;
+      left:0;
+      width:200px;
+      height:100%;
+      background: #000;
+      padding:20px;
+      box-shadow: 2px 0 6px rgba(0,0,0,0.5);
+      z-index:999;
+    }
+
+    .sidebar.hidden { transform: translateX(-220px); transition:0.3s; }
+
+    .sidebar ul { list-style:none; padding:0; }
+
+    .sidebar li { margin-bottom:12px; }
+
+    .sidebar button {
+      width:100%;
+      background:#222;
+      color:#eee;
+      border:none;
+      padding:10px;
+      border-radius:6px;
+      cursor:pointer;
+      text-align:left;
+      transition:0.2s;
+    }
+
+    .sidebar button:hover { background:#333; }
+  </style>
+</body>
+</html>
