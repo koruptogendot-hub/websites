@@ -2,108 +2,117 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard — Stealth</title>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin:0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color:#eee;
+    }
+
+    header {
+      text-align:center;
+      padding:30px 20px 10px 20px;
+      background: rgba(0,0,0,0.5);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    header h1 {
+      font-size:36px;
+      color:#00ff99;
+      margin-bottom:6px;
+    }
+
+    header p {
+      font-size:16px;
+      color:#a0a0a0;
+    }
+
+    main {
+      padding:20px;
+      text-align:center;
+    }
+
+    .menu-btns {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:16px;
+      margin-top:30px;
+    }
+
+    .menu-btn {
+      background: linear-gradient(145deg,#0b0b0b,#1f1f1f);
+      border:none;
+      padding:18px 28px;
+      font-size:18px;
+      font-weight:600;
+      color:#00ff99;
+      cursor:pointer;
+      border-radius:12px;
+      transition:0.3s;
+      box-shadow: 0 6px 12px rgba(0,255,153,0.2);
+    }
+
+    .menu-btn:hover {
+      background: linear-gradient(145deg,#1a1a1a,#0b0b0b);
+      color:#00ffcc;
+      transform:translateY(-4px);
+      box-shadow: 0 10px 20px rgba(0,255,153,0.4);
+    }
+  </style>
 </head>
 <body>
-  <!-- Sidebar button -->
-  <button id="menuBtn" class="menu-btn">☰</button>
-
-  <!-- Sidebar menu -->
-  <nav id="sidebar" class="sidebar hidden">
-    <ul id="menuList">
-      <!-- Menu items akan ditambahkan via JS -->
-    </ul>
-  </nav>
 
   <header>
-    <h1 id="welcomeText">Welcome!</h1>
-    <p id="roleText"></p>
+    <h1>WELCOME, <span id="userEmail">User</span>!</h1>
+    <p id="roleText">Role: User</p>
   </header>
 
-  <main id="mainContent">
-    <p>Pilih menu di sidebar kiri atas.</p>
+  <main>
+    <div class="menu-btns" id="menuContainer">
+      <!-- Buttons akan di-render lewat JS -->
+    </div>
   </main>
 
   <script>
-    // contoh data user login
+    // Simulasi data user login
     const userData = {
-      email: "admin@admin.id",  // nanti diisi dari login
-      role: "admin" // "admin" atau "user"
+      email: "example.com",
+      role: "user" // "admin" atau "user"
     };
 
-    const menuList = document.getElementById("menuList");
-    const mainContent = document.getElementById("mainContent");
-    const welcomeText = document.getElementById("welcomeText");
-    const roleText = document.getElementById("roleText");
-    const sidebar = document.getElementById("sidebar");
-    const menuBtn = document.getElementById("menuBtn");
+    document.getElementById("userEmail").textContent = userData.email;
+    document.getElementById("roleText").textContent = "Role: " + userData.role;
 
-    // Toggle sidebar
-    menuBtn.addEventListener("click", () => {
-      sidebar.classList.toggle("hidden");
-    });
+    const menuContainer = document.getElementById("menuContainer");
 
-    // update welcome
-    welcomeText.textContent = `Welcome, ${userData.email}!`;
-    roleText.textContent = `Role: ${userData.role}`;
-
-    // menu default
     let menus = [
-      { name: "Send Gmail", id: "sendGmail" },
-      { name: "Cek Bio", id: "cekBio" },
-      { name: "Pairing", id: "pairing" }
+      {name:"Send Gmail", link:"/sendgmail.html"},
+      {name:"Cek Bio WhatsApp", link:"/cekbio.html"},
+      {name:"Pairing Code", link:"/pairing.html"}
     ];
 
-    // jika admin, tambahkan menu admin
-    if(userData.role === "admin") {
-      menus.push({ name: "Admin Portal", id: "adminPortal" });
+    if(userData.role==="admin"){
+      menus.push({name:"Admin Portal", link:"/admin.html"});
     }
 
-    // render menu
     menus.forEach(menu => {
-      const li = document.createElement("li");
       const btn = document.createElement("button");
+      btn.classList.add("menu-btn");
       btn.textContent = menu.name;
-      btn.addEventListener("click", () => loadMenu(menu.id));
-      li.appendChild(btn);
-      menuList.appendChild(li);
+      btn.onclick = () => {
+        window.location.href = menu.link;
+      };
+      menuContainer.appendChild(btn);
     });
-
-    // fungsi load menu
-    function loadMenu(menuId) {
-      switch(menuId){
-        case "sendGmail":
-          mainContent.innerHTML = `<h2>Send Gmail</h2><p>Redirect ke halaman send gmail...</p>`;
-          break;
-        case "cekBio":
-          mainContent.innerHTML = `<h2>Cek Bio WhatsApp</h2><p>Redirect ke halaman cek bio...</p>`;
-          break;
-        case "pairing":
-          mainContent.innerHTML = `<h2>Pairing Code</h2><p>Redirect ke halaman pairing...</p>`;
-          break;
-        case "adminPortal":
-          mainContent.innerHTML = `<h2>Admin Portal</h2><p>Disini admin bisa Add Access user...</p>`;
-          break;
-        default:
-          mainContent.innerHTML = `<p>Menu tidak ditemukan.</p>`;
-      }
-    }
   </script>
 
-  <style>
-    body {
-      font-family: Inter, system-ui, sans-serif;
-      background: #111;
-      color: #eee;
-      margin:0;
-      padding:0;
-    }
-
-    header { text-align:center; padding:20px; }
-
-    main { padding:20px; }
+</body>
+</html>
 
     .menu-btn {
       position: fixed;
