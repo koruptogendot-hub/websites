@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register - Stealth Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(-45deg, #302b63, #0f0c29, #24243e, #00ffa3);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    canvas#particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .register-container {
+      position: relative;
+      z-index: 2;
+      background: rgba(0,0,0,0.6);
+      border: 2px solid rgba(0,255,153,0.6);
+      border-radius: 20px;
+      padding: 40px 50px;
+      width: 380px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0,255,153,0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    .register-container h2 {
+      color: #00ff99;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ff99;
+      letter-spacing: 1px;
+    }
+
+    .register-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+
+    .register-container input:focus {
+      background: rgba(0,255,153,0.1);
+      border: 1px solid #00ff99;
+      box-shadow: 0 0 10px #00ff99;
+    }
+
+    .captcha-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 10px 0;
+    }
+
+    .captcha-text {
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #00ff99;
+      user-select: none;
+      font-size: 18px;
+    }
+
+    .reload {
+      cursor: pointer;
+      color: #00ccff;
+      font-size: 18px;
+      transition: 0.3s;
+    }
+
+    .reload:hover {
+      transform: rotate(180deg);
+    }
+
+    .btn {
+      width: 100%;
+      background: linear-gradient(90deg, #00ff99, #00ccff);
+      color: #000;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.4s;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00ff99;
+    }
+
+    .link {
+      margin-top: 15px;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #00ff99;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <div class="register-container">
+    <h2>REGISTER</h2>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <input type="password" id="confirm" placeholder="Confirm Password">
+
+    <div class="captcha-box">
+      <span class="captcha-text" id="captcha"></span>
+      <span class="reload" onclick="generateCaptcha()">⟳</span>
+    </div>
+    <input type="text" id="captchaInput" placeholder="Enter Captcha">
+
+    <button class="btn" onclick="register()">REGISTER</button>
+
+    <div class="link">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <script>
+    // partikel background
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    let w, h, particles = [];
+
+    function init() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      particles = [];
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: Math.random() * 2,
+          dx: (Math.random() - 0.5) * 0.8,
+          dy: (Math.random() - 0.5) * 0.8
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "rgba(0,255,153,0.7)";
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > w) p.dx *= -1;
+        if (p.y < 0 || p.y > h) p.dy *= -1;
+      });
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener("resize", init);
+    init();
+    draw();
+
+    // captcha
+    function generateCaptcha() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let text = '';
+      for (let i = 0; i < 5; i++) {
+        text += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      document.getElementById('captcha').textContent = text;
+    }
+
+    generateCaptcha();
+
+    function register() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const confirm = document.getElementById("confirm").value.trim();
+      const captchaText = document.getElementById("captcha").textContent.trim();
+      const captchaInput = document.getElementById("captchaInput").value.trim();
+
+      if (!email || !password || !confirm || !captchaInput) {
+        alert("Please fill all fields!");
+        return;
+      }
+
+      if (password !== confirm) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      if (captchaText !== captchaInput.toUpperCase()) {
+        alert("Captcha incorrect!");
+        generateCaptcha();
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users") || "[]");
+      if (users.find(u => u.email === email)) {
+        alert("Email already registered!");
+        return;
+      }
+
+      users.push({ email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+      alert("Registration successful! Redirecting to login...");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

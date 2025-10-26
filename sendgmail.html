@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Send Gmail</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>SEND GMAIL</h1>
+  </header>
+
+  <main>
+    <p>INPUT THE TARGET NUMBER FIRST:</p>
+    <input id="target" placeholder="628xxxxxxxxx" />
+
+    <p>CHOOSE GMAIL ACCOUNT:</p>
+    <div id="gmailButtons">
+      <!-- Buttons Gmail 1-10 -->
+      <button data-index="0" class="gmailBtn active">Gmail 1</button>
+      <button data-index="1" class="gmailBtn">Gmail 2</button>
+      <button data-index="2" class="gmailBtn">Gmail 3</button>
+      <button data-index="3" class="gmailBtn">Gmail 4</button>
+      <button data-index="4" class="gmailBtn">Gmail 5</button>
+      <button data-index="5" class="gmailBtn">Gmail 6</button>
+      <button data-index="6" class="gmailBtn">Gmail 7</button>
+      <button data-index="7" class="gmailBtn">Gmail 8</button>
+      <button data-index="8" class="gmailBtn">Gmail 9</button>
+      <button data-index="9" class="gmailBtn">Gmail 10</button>
+    </div>
+
+    <button id="sendBtn">SEND</button>
+
+    <div id="result">
+      <div id="successBox" class="result success" style="display:none"></div>
+      <div id="failedBox" class="result failed" style="display:none"></div>
+    </div>
+  </main>
+
+  <script>
+    const gmailButtons = document.querySelectorAll(".gmailBtn");
+    const sendBtn = document.getElementById("sendBtn");
+    const targetInput = document.getElementById("target");
+    const successBox = document.getElementById("successBox");
+    const failedBox = document.getElementById("failedBox");
+
+    let selectedGmailIndex = 0;
+
+    gmailButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        gmailButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedGmailIndex = Number(btn.getAttribute("data-index"));
+      });
+    });
+
+    sendBtn.addEventListener("click", async () => {
+      const number = targetInput.value.trim();
+      if (!number) return alert("Masukkan nomor target terlebih dahulu!");
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Sending...";
+
+      const subject = "Your Subject Here"; // isi sesuai kebutuhan
+      const text = `HI THIS NUMBER ${number} Please Check The Number`;
+      const to = number + "@example.com"; // sesuaikan email tujuan jika perlu
+
+      try {
+        const res = await fetch("/api/send.js", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            gmailIndex: selectedGmailIndex,
+            to,
+            subject,
+            text
+          })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          successBox.innerHTML = `<strong>SUCCESS SEND TO EMAIL TARGET</strong><br>TIME SEND: ${new Date().toLocaleString()}<br>MESSAGE ID: ${data.messageId || "9999"}`;
+          successBox.style.display = "block";
+          failedBox.style.display = "none";
+        } else {
+          failedBox.innerHTML = `<strong>FAILED TO SEND EMAIL</strong><br>${data.message || data.error}`;
+          failedBox.style.display = "block";
+          successBox.style.display = "none";
+        }
+
+      } catch (err) {
+        failedBox.innerHTML = `<strong>FAILED TO SEND EMAIL</strong><br>Network error`;
+        failedBox.style.display = "block";
+        successBox.style.display = "none";
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = "SEND";
+      }
+    });
+  </script>
+</body>
+</html>

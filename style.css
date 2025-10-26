@@ -1,0 +1,145 @@
+/* ==== GLOBAL THEME ==== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: radial-gradient(circle, #000000, #0a0a0a, #111111);
+  color: #00ffcc;
+  overflow-x: hidden;
+  transition: background 1s ease-in-out;
+}
+
+h1, h2, h3 {
+  text-align: center;
+  text-shadow: 0 0 15px #00ffcc;
+}
+
+input, button {
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+a {
+  color: #00ffcc;
+  text-decoration: none;
+}
+
+/* ==== ANIMATION ==== */
+@keyframes glow {
+  0% { text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc; }
+  50% { text-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffaa; }
+  100% { text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc; }
+}
+
+/* ==== NAVBAR ==== */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  z-index: 10;
+  border-bottom: 1px solid #00ffcc44;
+}
+
+.menu-btn {
+  font-size: 1.5rem;
+  color: #00ffcc;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu-btn:hover {
+  transform: scale(1.2);
+  color: #00ffaa;
+}
+
+.menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 55px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid #00ffcc44;
+  border-radius: 8px;
+  box-shadow: 0 0 20px #00ffcc44;
+}
+
+.menu a {
+  padding: 10px 20px;
+  border-bottom: 1px solid #00ffcc22;
+  text-align: left;
+}
+
+.menu a:hover {
+  background: #00ffcc22;
+}
+
+.show {
+  display: flex;
+}
+
+/* ==== INPUTS ==== */
+input {
+  display: block;
+  width: 280px;
+  margin: 10px auto;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid #00ffcc;
+  color: #00ffcc;
+  border-radius: 8px;
+  text-align: center;
+}
+
+input:focus {
+  box-shadow: 0 0 10px #00ffcc;
+}
+
+/* ==== BUTTON ==== */
+button {
+  display: inline-block;
+  background: #00ffcc;
+  color: #000;
+  padding: 10px 25px;
+  font-size: 1rem;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 600;
+}
+
+button:hover {
+  transform: scale(1.05);
+  background: #00ffaa;
+}
+
+/* ==== CARD BOX ==== */
+.container {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #00ffcc33;
+  box-shadow: 0 0 20px #00ffcc22;
+  border-radius: 12px;
+  width: 360px;
+  margin: 80px auto;
+  padding: 30px;
+  text-align: center;
+  animation: glow 3s infinite;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  opacity: 0.6;
+  font-size: 0.9rem;
+}

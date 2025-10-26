@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Sigma Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(-45deg, #000000, #0f0c29, #24243e, #00ffa3);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      color: white;
+      overflow: hidden;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* MENU BUTTON */
+    .menu-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(0, 255, 153, 0.2);
+      border: 2px solid #00ff99;
+      color: #00ff99;
+      font-size: 28px;
+      border-radius: 10px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      z-index: 10;
+    }
+
+    .menu-btn:hover {
+      background: #00ff99;
+      color: black;
+      transform: scale(1.1);
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      left: -250px;
+      top: 0;
+      width: 250px;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      border-right: 2px solid #00ff99;
+      box-shadow: 0 0 20px rgba(0,255,153,0.4);
+      transition: 0.4s;
+      padding: 50px 20px;
+    }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .sidebar h2 {
+      color: #00ff99;
+      margin-bottom: 30px;
+      text-align: center;
+      text-shadow: 0 0 10px #00ff99;
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 15px 0;
+      color: #00ffcc;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .sidebar a:hover {
+      background: #00ff99;
+      color: black;
+      transform: scale(1.05);
+    }
+
+    /* CONTENT */
+    .content {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #00ff99;
+      text-shadow: 0 0 20px #00ff99;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #ddd;
+      margin-bottom: 40px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: linear-gradient(90deg, #00ff99, #00ccff);
+      color: black;
+      border: none;
+      padding: 14px 26px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00ff99;
+    }
+
+    /* FOOTER LOGIN/REGISTER */
+    .auth {
+      position: absolute;
+      bottom: 40px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .auth a {
+      color: #00ffcc;
+      margin: 0 10px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .auth a:hover {
+      color: #00ff99;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+  <div class="sidebar" id="sidebar">
+    <h2>MENU</h2>
+    <a href="#" onclick="checkLogin('sendgmail.html')">SEND GMAIL</a>
+    <a href="#" onclick="checkLogin('cekbio.html')">CEK BIO WHATSAPP</a>
+    <a href="#" onclick="checkLogin('pairing.html')">PAIRING CODE</a>
+  </div>
+
+  <div class="content">
+    <h1>HI, THIS IS MY WEBSITE</h1>
+    <p>Welcome to Sigma Portal – your control dashboard with Gmail sender, WhatsApp tools, and pairing system.</p>
+    <div class="buttons">
+      <button class="btn" onclick="checkLogin('sendgmail.html')">SEND GMAIL</button>
+      <button class="btn" onclick="checkLogin('cekbio.html')">CEK BIO</button>
+      <button class="btn" onclick="checkLogin('pairing.html')">PAIRING</button>
+    </div>
+  </div>
+
+  <div class="auth">
+    <a href="login.html">LOGIN</a> | <a href="register.html">REGISTER</a>
+  </div>
+
+  <script>
+    // buka tutup menu
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+
+    // cek apakah sudah login
+    function checkLogin(target) {
+      const currentUser = localStorage.getItem("currentUser");
+      if (!currentUser) {
+        alert("Please login or register first to access this feature!");
+        window.location.href = "login.html";
+      } else {
+        window.location.href = target;
+      }
+    }
+  </script>
+</body>
+</html>
